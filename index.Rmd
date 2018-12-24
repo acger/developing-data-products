@@ -1,0 +1,20 @@
+---
+title: "Developing Data Products - Assignment Week 2"
+author: "Achim Gerhardt"
+date: "24 Dezember 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+```
+
+## Map
+
+```{r}
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=-112.633853, lat=33.747252, popup="Mysterious Triangle")
+m  # Print the map
+```
