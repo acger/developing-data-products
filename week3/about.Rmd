@@ -1,0 +1,6 @@
+---
+title: "About This Website"
+---
+
+This website contains the week 3 assignment of the course Developing Data Products.
+Author: Achim Gerhardt

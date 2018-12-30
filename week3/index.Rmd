@@ -1,0 +1,81 @@
+---
+title: "Visualize Aircraft Noise Complaint Data"
+author: "Achim Gerhardt"
+date: "30.12.2018"
+---
+
+```{r include=FALSE}
+library(plotly)
+library(sf)
+library(dplyr)
+```
+
+## Description
+Counts of aircraft noise complaints by community and by month. The Aircraft Noise Abatement Office collects this data via the Complaint Hotline, Online Complaint Form, emails, letters and telephone calls to our office. This information is collected and published in a monthly report which is presented at the SFO Airport Community Roundtable meetings. It is used to understand community's aircraft noise concerns, to collaborate with stakeholders in an effort to reduce and manage aircraft noise.
+
+```{r echo=FALSE}
+# read data set
+data <- read.csv("data/Aircraft_Noise_Complaint_Data.csv", header = TRUE, stringsAsFactors = FALSE)
+
+head(data)
+```
+
+```{r init, include=FALSE}
+minYear <- min(data$Year)
+maxYear <- max(data$Year)
+```
+The dataset contains values from `r minYear` to `r maxYear`.
+
+## Cleaning the data
+* remove incomplete rows (only one row)
+* all community names are converted to lower case
+* the name _South San Franciscio_ is converted to _South San Francisco_
+* communities with less than 5% of the call
+
+
+## Aggregation
+```{r process_data, echo=FALSE}
+cleanded_data <- data %>%
+  na.omit() %>%
+  mutate(Community = replace(Community, Community =="South San Franciscio", "South San Francisco")) %>%
+  mutate(Community = tolower(Community))
+```
+
+```{r aggregate_data, echo=FALSE}
+aggregated_data <- cleanded_data %>%
+  group_by(Community) %>%
+  summarize(total_complaints = sum(Total.Complaints)) %>%
+  filter(total_complaints > quantile(total_complaints, 0.5)) %>%
+  arrange(desc(total_complaints))
+
+head(aggregated_data)
+```
+
+
+```{r plot_bar_chart, echo=FALSE}
+# read california census shape file
+plot_ly(aggregated_data, x = ~Community, y = ~total_complaints, type = 'bar', name = 'SF Air Traffic Complaints') %>%
+  layout(title = "Commulated air traffic noise complaints",
+         xaxis = list(title = "Community",
+         categoryorder = "array",
+         categoryarray = ~total_complaints),
+         yaxis = list(title = "# Complaints"))
+```
+
+## Map of the communities
+```{r read_shapefiles, include=FALSE}
+# read california census shape file
+ca_places <- sf::st_read("./shape/CA_PLACES/CA_Places_TIGER2016.shp")
+ca_state <- sf::st_read("./shape/CA_STATE/CA_State_TIGER2016.shp")
+```
+
+
+```{r plot_map, echo=FALSE, message=FALSE}
+complains_communities <- ca_places %>% filter(tolower(NAME) %in% aggregated_data$Community)
+plot_ly(complains_communities, name=~NAME)
+```
+
+
+# References
+Aircraft Noise Complaint Data: https://data.sfgov.org/Transportation/Aircraft-Noise-Complaint-Data/q3xd-hfi8  
+Geographic data: https://data.ca.gov/dataset/ca-geographic-boundaries
