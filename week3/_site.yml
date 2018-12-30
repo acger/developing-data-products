@@ -1,8 +1,0 @@
-name: "my-website"
-navbar:
-  title: "Visualize Aircraft Noise Complaint Data"
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "About"
-      href: about.html
