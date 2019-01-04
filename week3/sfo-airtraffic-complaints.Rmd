@@ -42,14 +42,14 @@ The dataset contains values from `r minYear` to `r maxYear`.
 
 ## Aggregated data (accumulated total complaints per community)
 ```{r process_data, echo=FALSE}
-cleanded_data <- data %>%
+cleaned_data <- data %>%
   na.omit() %>%
   mutate(Community = replace(Community, Community =="South San Franciscio", "South San Francisco")) %>%
   mutate(Community = tolower(Community))
 ```
 
 ```{r aggregate_data, echo=FALSE}
-aggregated_data <- cleanded_data %>%
+aggregated_data <- cleaned_data %>%
   group_by(Community) %>%
   summarize(total_complaints = sum(Total.Complaints)) %>%
   filter(total_complaints > quantile(total_complaints, 0.5)) %>%
@@ -76,8 +76,19 @@ ca_state <- sf::st_read("./shape/CA_STATE/CA_State_TIGER2016.shp")
 
 
 ```{r plot_map, echo=FALSE, message=FALSE}
-complains_communities <- ca_places %>% filter(tolower(NAME) %in% aggregated_data$Community)
-plot_ly(complains_communities, name=~NAME)
+complaints_communities <- ca_places %>% 
+  mutate(name_lowercase = tolower(NAME)) %>%
+  inner_join(aggregated_data %>% mutate(name_lowercase = tolower(Community)), by = c("name_lowercase"))
+
+
+complaints_communities$hover <- with(complaints_communities, paste(NAME, "<br>", "Complaints", total_complaints))
+
+
+
+
+plot_ly(complaints_communities,
+        color=~total_complaints,
+        hover=~hover)
 ```
 
 
