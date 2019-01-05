@@ -1,41 +1,51 @@
 ---
-title: "Siny App Placeholder"
+title: "Child Age/Weight dependency"
 author: "Achim Gerhardt"
-date: "2 Januar 2019"
+date: "5 Januar 2019"
 output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(plotly)
 ```
 
-## R Markdown
+## The WHO Child Growth Standards
+The idea of this app is to visualize WHO child growth standards data. For this project we focus on the age/weigth data for boys and girls.
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+These standards were developed using data collected in the WHO Multicentre Growth Reference Study.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+## The Data
+The data contains the percentiles of the weight by age of the child. The app lets you select the age of the child and displays it in the diagram.
+```{r}
 
-## Slide with Bullets
+percentiles_girls <- read.table("data/wfa_girls_p_exp.txt", header = TRUE, sep="\t", stringsAsFactors = FALSE)
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
+plot_ly(percentiles_girls, x = ~Age, y = ~P50, name = 'P50', type = 'scatter', mode = 'lines', line = list(color = 'black', width = 2)) %>%
+    add_trace(y = ~P3, name = 'P3', line = list(color = 'rgb(205, 12, 24)', width = 3)) %>%
+    add_trace(y = ~P10, name = 'P10', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
+    add_trace(y = ~P15, name = 'P15', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
+    add_trace(y = ~P85, name = 'P85', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
+    add_trace(y = ~P90, name = 'P90', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
+    add_trace(y = ~P97, name = 'P97', line = list(color = 'rgb(205, 12, 24)', width = 3)) %>%
+    layout(title = "Child weight (kg) / age (days)",
+           xaxis = list(title = "Weight (days)"),
+           yaxis = list(title = "Weight (kg)"))
 ```
 
-## Slide with Plot
 
-```{r pressure}
-plot(pressure)
-```
+## App
+The app is splited in three parts. 
 
-## Data Source
-WHO:
-z-scores girls: https://www.who.int/childgrowth/standards/wfa_girls_z_exp.txt
-z-scores boys: https://www.who.int/childgrowth/standards/wfa_boys_z_exp.txt
-percentiles girls: https://www.who.int/childgrowth/standards/wfa_girls_p_exp.txt
-percentiles boys: https://www.who.int/childgrowth/standards/wfa_boys_p_exp.txt
+* _server.R_ loads the data and contains the business logic 
+* _ui.R_ describes the user interface 
+* _prepare_data.R_ is responsible for downloading and preprocessing (extracting) the data from the WHO page. This part is only necessary if you want to redownload the data.
+
+## Links
+### App
+The app: https://acger.shinyapps.io/week4/  
+
+The code: https://github.com/acger/developing-data-products/tree/gh-pages/week4  
+
+### Data from WHO
+https://www.who.int/childgrowth/standards/en/
