@@ -1,5 +1,6 @@
 ---
 title: "Child Age/Weight dependency"
+subtitle: "The WHO Child Growth Standards"
 author: "Achim Gerhardt"
 date: "5 Januar 2019"
 output: ioslides_presentation
