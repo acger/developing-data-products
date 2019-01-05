@@ -17,7 +17,7 @@ The idea of this app is to visualize WHO child growth standards data. For this p
 These standards were developed using data collected in the WHO Multicentre Growth Reference Study.
 
 ## The Data
-The data contains the percentiles of the weight by age of the child. The app lets you select the age of the child and displays it in the diagram.
+The data contains the percentiles of the weight by age of the child. See this interactive plot of the data:
 
 ```{r}
 
@@ -28,7 +28,7 @@ plot_ly(percentiles_girls, x = ~Age, y = ~P50, name = 'P50', type = 'scatter', m
     add_trace(y = ~P15, name = 'P15', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
     add_trace(y = ~P85, name = 'P85', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
     add_trace(y = ~P97, name = 'P97', line = list(color = 'rgb(205, 12, 24)', width = 3)) %>%
-    layout(title = "Child weight (kg) / age (days)",
+    layout(title = "Girl Child weight (kg) / age (days)",
            xaxis = list(title = "Weight (days)"),
            yaxis = list(title = "Weight (kg)"))
 ```
