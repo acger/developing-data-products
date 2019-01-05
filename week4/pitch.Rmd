@@ -18,7 +18,7 @@ The idea of this app is to visualize WHO child growth standards data. For this p
 These standards were developed using data collected in the WHO Multicentre Growth Reference Study.
 
 ## The Data
-The data contains the percentiles of the weight by age of the child. Example plot using the same function as the app for 30 day old girls:
+The data contains the percentiles of the weight by age of the child. Interactive example plot using the same function as the app for 30 day old girls:
 
 ```{r}
 
