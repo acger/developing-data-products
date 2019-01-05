@@ -20,7 +20,7 @@ The data contains the percentiles of the weight by age of the child. The app let
 
 ```{r}
 
-percentiles_girls <- read.table("data/wfa_girls_p_exp.txt", header = TRUE, sep="\t", stringsAsFactors = FALSE)[1:30,]
+percentiles_girls <- subset(read.table("data/wfa_girls_p_exp.txt", header = TRUE, sep="\t", stringsAsFactors = FALSE), select = c(Age, P3, P15, P50, P85, P97))[1:30,]
 
 plot_ly(percentiles_girls, x = ~Age, y = ~P50, name = 'P50', type = 'scatter', mode = 'lines', line = list(color = 'black', width = 2)) %>%
     add_trace(y = ~P3, name = 'P3', line = list(color = 'rgb(205, 12, 24)', width = 3)) %>%
