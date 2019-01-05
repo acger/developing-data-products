@@ -24,10 +24,8 @@ percentiles_girls <- read.table("data/wfa_girls_p_exp.txt", header = TRUE, sep="
 
 plot_ly(percentiles_girls, x = ~Age, y = ~P50, name = 'P50', type = 'scatter', mode = 'lines', line = list(color = 'black', width = 2)) %>%
     add_trace(y = ~P3, name = 'P3', line = list(color = 'rgb(205, 12, 24)', width = 3)) %>%
-    add_trace(y = ~P10, name = 'P10', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
     add_trace(y = ~P15, name = 'P15', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
     add_trace(y = ~P85, name = 'P85', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
-    add_trace(y = ~P90, name = 'P90', line = list(color = 'rgb(22, 96, 167)', width = 1)) %>%
     add_trace(y = ~P97, name = 'P97', line = list(color = 'rgb(205, 12, 24)', width = 3)) %>%
     layout(title = "Child weight (kg) / age (days)",
            xaxis = list(title = "Weight (days)"),
